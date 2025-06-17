@@ -6,7 +6,8 @@
   "dependencies": {
     "date-fns": "^4.1.0",
     "express": "^4.17.1",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

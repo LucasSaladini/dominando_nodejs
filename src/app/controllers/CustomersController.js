@@ -1,13 +1,8 @@
 import { Op } from "sequelize";
 import { parseISO } from "date-fns";
+import * as Yup from "yup";
 import Customer from "../models/Customer";
 import Contact from "../models/Contact"
-
-let customers = [
-  { id: 1, name: "Dev Samurai", site: "http://devsamurai.com.br" },
-  { id: 2, name: "Google", site: "http://google.com" },
-  { id: 3, name: "UOL", site: "http://uol.com.br" },
-];
 
 class CustomersController {
   async index(req, res) {
@@ -111,48 +106,64 @@ class CustomersController {
     return res.json(data);
   }
 
-  show(req, res) {
-    const id = parseInt(req.params.id);
-    const customer = customers.find((item) => item.id === id);
-    const status = customer ? 200 : 404;
+  async show(req, res) {
+    const customer = await Customer.findByPk(req.params.id);
 
-    return res.status(status).json(customer);
-  }
-
-  create(req, res) {
-    const { name, site } = req.body;
-    const id = customers[customers.length - 1].id + 1;
-
-    const newCustomer = { id, name, site };
-    customers.push(newCustomer);
-
-    return res.status(201).json(newCustomer);
-  }
-
-  update(req, res) {
-    const id = parseInt(req.params.id);
-    const { name, site } = req.body;
-
-    const index = customers.findIndex((item) => item.id === id);
-    const status = index >= 0 ? 200 : 404;
-
-    if (index >= 0) {
-      customers[index] = { id: parseInt(id), name, site };
+    if(!customer) {
+      return res.status(404).json();
     }
 
-    return res.status(status).json(customers[index]);
+    return res.json(customer);
   }
 
-  destroy(req, res) {
-    const id = parseInt(req.params.id);
-    const index = customers.findIndex((item) => item.id === id);
-    const status = index >= 0 ? 200 : 404;
+  async create(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string().email().required(),
+      status: Yup.string().uppercase()
+    });
 
-    if (index >= 0) {
-      customers.splice(index, 1);
+    if(!(await schema.isValid(req.body))) {
+      return res.status(400).json({error: "Error on validate schema."});
     }
 
-    return res.status(status).json();
+    const customer = await Customer.create(req.body)
+
+    return res.status(201).json(customer);
+  }
+
+  async update(req, res) {
+        const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+      status: Yup.string().uppercase()
+    });
+
+    if(!(await schema.isValid(req.body))) {
+      return res.status(400).json({error: "Error on validate schema."});
+    }
+
+    const customer = await Customer.findByPk(req.params.id);
+
+    if(!customer) {
+      return res.status(404).json();
+    }
+
+    await customer.update(req.body);
+
+    return res.json(customer);
+  }
+
+  async destroy(req, res) {
+    const customer = await Customer.findByPk(req.params.id);
+
+    if(!customer) {
+      return res.status(404).json();
+    }
+
+    await customer.destroy();
+
+    return res.json();
   }
 }
 
