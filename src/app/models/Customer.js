@@ -9,7 +9,11 @@ class Customer extends Model {
                 status: Sequelize.ENUM('ACTIVE', 'ARCHIVED')
             },
             {
-                sequelize
+                sequelize,
+                name: {
+                    singular: "customer",
+                    plural: "customers"
+                } 
             }
         );
     }
