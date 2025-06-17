@@ -1,7 +1,7 @@
-import Sequelize, { Model } from "sequelize";
+import Sequelize, { Model } from 'sequelize';
 
-class Customer extends Model {
-    static init (sequelize) {
+class Contact extends Model {
+    static init(sequelize) {
         super.init(
             {
                 name: Sequelize.STRING,
@@ -11,12 +11,12 @@ class Customer extends Model {
             {
                 sequelize
             }
-        );
+        )
     }
 
     static associate(models) {
-        this.hasMany(models.Contact)
+        this.belongsTo(models.Customer, { foreignKey: 'customer_id' })
     }
 }
 
-export default Customer;
+export default Contact;
