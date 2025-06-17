@@ -1,3 +1,5 @@
+import Customer from "../models/Customer";
+
 let customers = [
   { id: 1, name: "Dev Samurai", site: "http://devsamurai.com.br" },
   { id: 2, name: "Google", site: "http://google.com" },
@@ -5,8 +7,12 @@ let customers = [
 ];
 
 class CustomersController {
-  index(req, res) {
-    return res.json(customers);
+  async index(req, res) {
+    const data = await Customer.findAll({
+      limit: 1000
+    });
+
+    return res.json(data);
   }
 
   show(req, res) {
