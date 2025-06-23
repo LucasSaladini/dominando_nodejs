@@ -1,8 +1,8 @@
 import { Op } from "sequelize";
 import { parseISO } from "date-fns";
 import * as Yup from "yup";
-import Customer from "../models/Customer";
-import Contact from "../models/Contact"
+import Customer from "../models/Customer.js";
+import Contact from "../models/Contact.js"
 
 class CustomersController {
   async index(req, res) {
