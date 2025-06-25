@@ -2,8 +2,14 @@ import { Router } from "express";
 import customers from "./app/controllers/CustomersController.js";
 import contacts from "./app/controllers/ContactsController.js";
 import users from "./app/controllers/UsersController.js"
+import sessions from "./app/controllers/SessionsController.js"
+import auth from "./app/middlewares/auth.js";
 
 const routes = new Router();
+
+routes.post("/sessions", sessions.create);
+
+routes.use(auth);
 
 routes.get("/customers", customers.index);
 routes.get("/customers/:id", customers.show);

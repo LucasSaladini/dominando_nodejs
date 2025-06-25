@@ -88,6 +88,8 @@ class UsersController {
             limit,
             offset: limit * page - limit
         });
+
+        return res.json(data);
     }
 
     async show(req, res) {
