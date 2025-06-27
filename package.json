@@ -11,6 +11,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.1",
     "sequelize": "^6.37.7",
     "youch": "^3.3.4",
     "yup": "^1.6.1"

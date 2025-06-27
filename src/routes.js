@@ -1,11 +1,17 @@
 import { Router } from "express";
+import multer from "multer";
+
 import customers from "./app/controllers/CustomersController.js";
 import contacts from "./app/controllers/ContactsController.js";
 import users from "./app/controllers/UsersController.js"
 import sessions from "./app/controllers/SessionsController.js"
+import files from "./app/controllers/FilesController.js";
+
 import auth from "./app/middlewares/auth.js";
+import multerConfig from "./config/multer.js";
 
 const routes = new Router();
+const upload = multer(multerConfig);
 
 routes.post("/sessions", sessions.create);
 
@@ -28,5 +34,7 @@ routes.get("/users/:id", users.show);
 routes.post("/users", users.create);
 routes.put("/users/:id", users.update);
 routes.delete("/users/:id", users.destroy);
+
+routes.post("/files", upload.single("file"), files.create);
 
 export default routes;
